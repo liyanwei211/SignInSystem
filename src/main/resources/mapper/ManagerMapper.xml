@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.ManagerMapper">
+    <resultMap id="ManagerResult" type="com.liyanwei.signinsystem.bean.Manager">
+        <id column="m_id" property="mid"/>
+        <result column="m_number" property="mnumber"/>
+        <result column="m_name" property="mname"/>
+        <result column="m_garden" property="mgender"/>
+        <result column="m_birthday" property="mbirthday"/>
+        <result column="m_idcard" property="midcard"/>
+        <result column="m_phone" property="mphone"/>
+        <result column="m_email" property="memail"/>
+    </resultMap>
+    <resultMap id="SignRecordResult" type="SignRecord">
+        <id column="qd_id" property="qdid"/>
+        <result column="s_number" property="snumber"/>
+        <result column="t_number" property="tnumber"/>
+        <result column="c_number" property="cnumber"/>
+        <result column="signintime" property="signintime"/>
+        <result column="set_id" property="setId"/>
+    </resultMap>
+   <!-- 添加管理员信息 -->
+   <insert id="addManager" parameterType="com.liyanwei.signinsystem.bean.Manager">
+        insert into Managers(m_number, m_name, m_password, m_gender, m_birthday, m_idcard, m_phone, m_email) values (#{mnumber},#{mname},#{mpassword},#{mgender},#{mbirthday},#{midcard},#{mphone},#{memail})
+   </insert>
+    <!--选择所有的管理员用户-->
+    <select id="selectAllManagers" resultMap="ManagerResult">
+        select m_id,m_name,m_gender,m_birthday,m_idcard,m_phone,m_email from Managers
+    </select>
+    <!--通过用户名和密码查询管理员-->
+    <select id="selectManager" parameterType="String" resultMap="ManagerResult">
+        select m_id,m_name,m_password,m_gender,m_birthday,m_idcard,m_phone,m_email from Managers where m_name=#{mname} and m_password=#{mpassword}
+    </select>
+    <!--通过管理员工号和密码查询用户-->
+    <select id="selectManagerByNumAndPass" parameterType="String" resultMap="ManagerResult">
+        select m_id, m_number, m_name, m_password, m_gender, m_birthday, m_idcard, m_phone, m_email from managers where m_number=#{mnumber} and m_password=#{mpassword}
+    </select>
+    <!--通过管理员ID对管理员信息进行修改-->
+    <!--查询签到信息-->
+    <select id="selectSignInRecord" resultMap="SignRecordResult">
+        select qd_id, s_number, t_number, c_number, signintime, set_id from signinrecord
+    </select>
+    <!--根据ID查询签到信息-->
+    <select id="selectSignInRecordById" resultMap="SignRecordResult">
+        select qd_id, s_number, t_number, c_number, signintime, set_id from signinrecord where qd_id=#{qdid}
+    </select>
+
+
+    <update id="updateManagerById" parameterType="Manager">
+        update managers
+        <set>
+            <if test="mnumber!=null">m_number=#{mnumber}</if>
+            <if test="mname!=null">m_name=#{mname}</if>
+            <if test="mpassword!=null">m_password=#{mpassword}</if>
+            <if test="mgender!=null">m_gender=#{mgender}</if>
+            <if test="mbirthday!=null">m_birthday=#{mbirthday}</if>
+            <if test="midcard!=null">m_idcard=#{midcard}</if>
+            <if test="mphone!=null">m_phone=#{mphone}</if>
+            <if test="memail!=null">m_email=#{memail}</if>
+        </set>
+        where m_id=#{mid}
+    </update>
+    <!--通过管理员ID删除管理员信息-->
+    <delete id="deleteManagerById" parameterType="Integer">
+        delete from managers where m_id=#{mid}
+    </delete>
+    <!--通过ID删除设置签到信息-->
+    <delete id="deleteSignSetById" parameterType="Integer">
+        delete from setsignin where id=#{setId}
+    </delete>
+    <!--通过ID删除签到信息-->
+    <delete id="deleteSignRecordById" parameterType="Integer">
+        delete from signinrecord where qd_id=#{qdid}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我的签到</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div>
+        <ul class="layui-nav fly-nav layui-hide-xs">
+
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="studentinfo.html">
+                <i class="layui-icon">&#xe68e;</i>
+                个人信息
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                我的选课
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="course.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                课程视频
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="setinfo.html">
+                <i class="layui-icon">&#xe612;</i>
+                修改信息
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="signin.html">
+                <i class="layui-icon" >&#x1005;</i>
+                我的签到
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                我的请假
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="selectsignin.html">签到查询</a></dd>
+                <dd><a href="selectqingjia.html">请假查询</a></dd>
+            </dl>
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+
+            <div id="LAY_minemsg" style="margin-top: 10px;">
+                <table class="layui-table" lay-filter="demo" id="test"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="fly-footer">
+
+</div>
+
+<script src="../../res/layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" id="addCourse" lay-event="add">签到</a>
+</script>
+<script>
+    //表格组件
+    layui.use('table', function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        table.render({
+            elem: '#test'
+            ,url:'/StudentSignInBySnum'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                {field:'setId', title: 'ID', sort: true,align: "center"}
+                ,{field:'cname', title: '课程名',align: "center"} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                ,{field:'tname', title: '授课教师',align: "center"}
+                ,{field:'classtime', title: '上课时间',align: "center"}
+                , {fixed: 'right', align: 'center', toolbar: '#barDemo'}
+
+            ]]
+            ,response: {
+                statusCode:200//重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item//解析数据列表
+                };
+            }
+            ,page:true
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'detail') {
+                layer.msg('课程ID：' + data.cid +'<br>'+
+                    '课程号：' + data.cnumber +'<br>'+
+                    '课程名称：' + data.cname +'<br>'+
+                    '课时：' + data.ctime
+                );
+            } else if (obj.event === 'del') {
+
+            } else if (obj.event === 'add') {
+                var url = "/StudentSignIn";
+                $.get(url,{"setId":data.setId},function (data) {
+                    alert(data.msg);
+                });
+            }
+        });
+    });
+
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../../res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

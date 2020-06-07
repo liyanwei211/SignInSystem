@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>教师信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+
+        <ul class="layui-nav fly-nav layui-hide-xs">
+
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="../login.html">
+                <i class="layui-icon">&#xe68e;</i>
+                注销登录
+            </a>
+        </li>
+        <li class="layui-nav-item  ">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                课程信息
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="studentinfo.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                学生信息
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="teacher.html">
+                <i class="layui-icon">&#xe612;</i>
+                教师信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="signins.html">
+                <i class="layui-icon">&#x1005;</i>
+                查看签到
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                查看请假
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child">
+                <dd class="layui-nav-item"><a href="selectstudent.html">学生信息查询</a></dd>
+                <dd class="layui-nav-item"><a href="selectcourse.html">课程信息查询</a></dd>
+                <dd class="layui-nav-item"><a href="selectteacher.html">教师信息查询</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe61f;</i>
+                信息添加
+            </a>
+            <dl class="layui-nav-child" >
+                <dd class="layui-nav-item" ><a href="addstudent.html">添加学生信息</a></dd>
+                <dd class="layui-nav-item" ><a href="addcourse.html">添加课程信息</a></dd>
+                <dd class="layui-nav-item" ><a href="addteacher.html">添加教师信息</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+
+            <div class="layui-tab-content" style="padding: 20px 0;">
+                <table>
+                    <tr>
+                        <td>
+                            <label  class="layui-form-label">学院：</label>
+                            <div class="layui-inline">
+                                <input class="layui-input" name="tfaculty" id="tfaculty" autocomplete="off">
+                            </div>
+                            <button class="layui-btn" data-type="reload" id="searchSFaculty">搜索</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="layui-tab-item layui-show">
+                    <!--课程表格-->
+                    <table class="layui-table" lay-filter="demo" id="test"></table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="fly-footer">
+
+</div>
+<script type="text/html" id="barDemo" width="100">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../../res/layui/layui.js"></script>
+<script>
+    //表格组件
+    layui.use('table', function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        table.render({
+            elem: '#test'
+            ,id: 'test'
+            , url: '/SelectAllTeacher'
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , cols: [[
+                {type:'checkbox', fixed: 'left',align: "center",}
+                ,{field:'tid',title: '教师ID', sort: true, align: "center"}
+                ,{field:'tnumber',title: '教师工号', align: "center"}
+                ,{field:'tname',title: '教师姓名',sort: false, align: "center"}
+                ,{field:'tgender',title: '性别', sort: false, align: "center"}
+                ,{field:'tfaculty',title: '所属学院', sort: false, align: "center"}
+                ,{field:'tphone', title: '电话',sort: false, align: "center"}
+                ,{field:'temail', title: '邮箱',sort: false, align: "center"}
+                ,{fixed: 'right',align:'center', toolbar: '#barDemo'}
+            ]]
+            , page: true
+            ,response: {
+                statusCode:200//重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            }
+        });
+
+        $("#searchSFaculty").on('click', function () {
+            var $ = layui.$, active = {
+                reload: function () {
+                    var tfaculty = $("#tfaculty").val();
+                    var url = "/SelectTeacherByFaculty/"+tfaculty;
+                    //执行重载
+                    table.reload('test',{
+                        url:url
+                        ,page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            tfaculty:tfaculty
+                        }
+                    });
+                }
+            };
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+    //表单提交
+    layui.use('form', function () {
+        var form = layui.form;
+
+
+    });
+    //表格
+    layui.use('table', function () {
+        var table = layui.table;
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'detail') {
+                layer.msg('教师ID：' + data.tid +'<br>'+
+                    '教师工号：' + data.tnumber +'<br>'+
+                    '教师姓名：' + data.tname +'<br>'+
+                    '教师密码：' + data.tpassword +'<br>'+
+                    '教师性别：' + data.tgender +'<br>'+
+                    '教师生日：' + data.tbirthday +'<br>'+
+                    '教师身份证号：' + data.tidcard +'<br>'+
+                    '教师电话：' + data.tphone +'<br>'+
+                    '教师邮箱：' + data.temail );
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                    var url = "/deleteTeacher/"+data.tid;
+                    $.get(url,{"sid":data.sid},function () {
+                        alert("删除成功");
+                        console.log(msg);
+                        var $ = layui.$, active = {
+                            reload: function () {
+                                var url = "/SelectAllTeacher"
+                                //执行重载
+                                table.reload('test',{
+                                    url:url
+                                    ,page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                    , where: {
+                                    }
+                                });
+                            }
+                        };
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                window.location.href = 'updateteacher.html'
+            }
+        });
+
+        var $ = layui.$, active = {
+            getCheckData: function () { //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            , getCheckLength: function () { //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () { //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../../res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

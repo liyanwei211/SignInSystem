@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>请假信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="teacherinfo.html">
+                <i class="layui-icon">&#xe68e;</i>
+                个人信息
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                我的选课
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="coursevideo.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                课程视频
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="setinfo.html">
+                <i class="layui-icon">&#xe612;</i>
+                修改信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="setsignin.html">
+                <i class="layui-icon">&#x1005;</i>
+                设置签到
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="studentsignin.html">
+                <i class="layui-icon">&#x1005;</i>
+                查看签到
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                查看请假
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child">
+                <dd class="layui-nav-item layui-this"><a href="selectstudents.html">学生信息查询</a></dd>
+                <dd><a href="selectcourses.html">课程信息查询</a></dd>
+            </dl>
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="demoTable">
+            <table>
+                <tr>
+                    <td>
+                        <label  class="layui-form-label">班级：</label>
+                        <div class="layui-inline">
+                            <input class="layui-input" name="sclass" id="sclass" autocomplete="off">
+                        </div>
+                        <button  class="layui-btn" data-type="reload" id="searchClass">搜索</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <table class="layui-table"lay-filter="demo" id="test"></table>
+    </div>
+
+</div>
+
+
+<div class="fly-footer">
+
+</div>
+
+<script src="../../res/layui/layui.js"></script>
+<script>
+    //表格组件
+    layui.use('table', function () {
+
+        var table = layui.table;
+        var $ = layui.jquery;
+        table.render({
+            elem: '#test'
+            , url: '/SelectAllStudentQj'
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , cols: [[
+                {field: 'snumber', title: '学号', sort: true, align: "center"}
+                , {field: 'sname', title: '姓名', align: "center"} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                , {field: 'sclass', title: '班级', align: "center"}
+                , {field: 'qjtime', title: '请假时间', align: "center"}
+                , {field: 'qjreason', title: '请假理由', align: "center"}
+                , {field: 'qjstatus', title: '状态', edit: true , align: 'center'} //单元格内容水平居中
+
+            ]]
+            , response: {
+                statusCode: 200//重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            }
+            , page: true
+        });
+
+        //表格重载
+        $("#searchClass").on('click', function () {
+            var $ = layui.$, active = {
+                reload: function () {
+                    var sclass = $("#sclass").val();
+                    var url = "/SelectQJByClass/"+sclass;
+                    //执行重载
+                    table.reload('test', {
+                        url: url
+                        ,page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            sclass : sclass
+                        }
+                    });
+                }
+            };
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        table.on('edit(demo)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+            console.log(obj.value); //得到修改后的值
+            console.log(obj.field); //当前编辑的字段名
+            console.log(obj.data); //所在行的所有相关数据
+            $.get("/UpdateStudentQJ",{"qjid":obj.data.qjid,"qjstatus":obj.value},function (data) {
+                alert(data.msg);
+            })
+        });
+
+    });
+
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../../res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

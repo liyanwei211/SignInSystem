@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>学生选课</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+
+        <ul class="layui-nav fly-nav layui-hide-xs">
+
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="studentinfo.html">
+                <i class="layui-icon">&#xe68e;</i>
+                个人信息
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                我的选课
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="course.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                课程视频
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="setinfo.html">
+                <i class="layui-icon">&#xe612;</i>
+                修改信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="signin.html">
+                <i class="layui-icon">&#x1005;</i>
+                我的签到
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                我的请假
+            </a>
+        </li>
+        <li class="layui-nav-item" >
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child" >
+                <dd><a href="selectsignin.html">签到查询</a></dd>
+                <dd><a href="selectqingjia.html">请假查询</a></dd>
+            </dl>
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <!--
+        <div class="fly-msg" style="margin-top: 15px;">
+          您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
+        </div>
+        -->
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <ul class="layui-tab-title" id="LAY_mine">
+                <li data-type="mine-jie" id="" lay-id="index" onclick="tb1()" class="layui-this">我的课程</li>
+                <li data-type="collection" data-url="/collection/find/" onclick="tb2()" lay-id="collection">所有课程</li>
+            </ul>
+            <div class="layui-tab-content" style="padding: 20px 0;">
+                <div class="layui-tab-item layui-show">
+                    <table class="layui-table" lay-filter="demo1" id="idTest2"></table>
+                </div>
+                <div class="layui-tab-item">
+
+                    <table class="layui-table" lay-filter="demo" id="idTest"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fly-footer">
+</div>
+
+<script src="../../res/layui/layui.js"></script>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-xs" id="addCourse" lay-event="add">选课</a>
+</script>
+<script type="text/html" id="barDemo1">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="del">删除选课</a>
+</script>
+<script>
+
+    function tb1() {
+        layui.use('table', function () {
+            var table = layui.table;
+            var $ = layui.jquery;
+            //表格1渲染
+            table.render({
+                elem: '#idTest2'
+                , id: 'idTest2'
+                , url: '/html/SelectStudentCc'
+                , toolbar: true
+                , title: '选课信息'
+                , totalRow: true
+                , cols: [[
+                    {type: 'checkbox', fixed: 'left', sort: true, align: "center",}
+                    , {field: 'cid', title: '课程ID', width: 80, fixed: 'left', align: "center"}
+                    , {field: 'cnumber', title: '课程号', align: "center"}
+                    , {field: 'cname', title: '课程名称', align: "center"}
+                    , {field: 'ctime', title: '课时', align: "center"}
+                    , {fixed: 'right', align: 'center', toolbar: '#barDemo1'}
+
+                ]]
+                , page: true
+                , response: {
+                    statusCode: 200//重新规定成功的状态码为 200，table 组件默认为 0
+                }
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.total, //解析数据长度
+                        "data": res.rows.item //解析数据列表
+                    };
+                }
+            });
+
+        });
+    }
+
+    function tb2() {
+        layui.use('table', function () {
+            var table = layui.table;
+            var $ = layui.jquery;
+            //表格1渲染
+            table.render({
+                elem: '#idTest'
+                , id: 'idTest'
+                , url: '/html/SelectAllCourse'
+                , toolbar: true
+                , title: '全部课程信息'
+                , totalRow: true
+                , cols: [[
+                    {type: 'checkbox', fixed: 'left', sort: true, align: "center",}
+                    , {field: 'cid', title: '课程ID', width: 80, fixed: 'left', align: "center"}
+                    , {field: 'cnumber', title: '课程号', align: "center"}
+                    , {field: 'cname', title: '课程名称', align: "center"}
+                    , {field: 'ctime', title: '课时', align: "center"}
+                    , {fixed: 'right', align: 'center', toolbar: '#barDemo'}
+
+                ]]
+                , page: true
+                , response: {
+                    statusCode: 200//重新规定成功的状态码为 200，table 组件默认为 0
+                }
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.total, //解析数据长度
+                        "data": res.rows.item //解析数据列表
+                    };
+                }
+            });
+        });
+    }
+
+
+    layui.use('table',function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+
+      //监听工具条
+      table.on('tool(demo)', function (obj) {
+          var data = obj.data;
+          console.log(data);
+          if (obj.event === 'detail') {
+              layer.msg('课程ID：' + data.cid +'<br>'+
+                  '课程号：' + data.cnumber +'<br>'+
+                  '课程名称：' + data.cname +'<br>'+
+                  '课时：' + data.ctime
+              );
+          } else if (obj.event === 'del') {
+
+          } else if (obj.event === 'add') {
+              var url = "/html/AddStudentCc";
+              $.get(url,{"cnumber":data.cnumber},function (data) {
+                  alert(data.msg);
+              });
+          }
+      });
+
+      //监听工具条
+      table.on('tool(demo1)', function (obj) {
+          var data = obj.data;
+          console.log(data);
+          if (obj.event === 'detail') {
+              layer.msg('课程ID：' + data.cid +'<br>'+
+                  '课程号：' + data.cnumber +'<br>'+
+                  '课程名称：' + data.cname +'<br>'+
+                  '课时：' + data.ctime
+              );
+          } else if (obj.event === 'del') {
+              layer.confirm('', function (index) {
+                  obj.del();
+                  layer.close(index);
+                  var url = "/html/DeleteStudentCc";
+                  $.get(url,{"cnumber":data.cnumber},function (data) {
+                      alert(data.msg);
+                  });
+              });
+
+          } else if (obj.event === 'add') {
+
+          }
+      });
+
+
+  });
+  layui.use('table', function(){
+    var table = layui.table;
+    //监听表格复选框选择
+    table.on('checkbox(demo)', function(obj){
+      console.log(obj)
+    });
+
+    var $ = layui.$, active = {
+      getCheckData: function(){ //获取选中数据
+        var checkStatus = table.checkStatus('idTest')
+                ,data = checkStatus.data;
+        layer.alert(JSON.stringify(data));
+      }
+      ,getCheckLength: function(){ //获取选中数目
+        var checkStatus = table.checkStatus('idTest')
+                ,data = checkStatus.data;
+        layer.msg('选中了：'+ data.length + ' 个');
+      }
+      ,isAll: function(){ //验证是否全选
+        var checkStatus = table.checkStatus('idTest');
+        layer.msg(checkStatus.isAll ? '全选': '未全选')
+      }
+    };
+
+    $('.demoTable .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+  });
+  layui.cache.page = 'user';
+  layui.cache.user = {
+      username: ''
+      ,uid: -1
+      ,avatar: '../../res/images/avatar/00.jpg'
+      ,experience: 83
+      ,sex: '男'
+  };
+
+    layui.config({
+        version: "3.0.0"
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.StudentMapper">
+    <resultMap id="StudentResult" type="com.liyanwei.signinsystem.bean.Student">
+        <id column="s_id" property="sid"/>
+        <result column="s_number" property="snumber"/>
+        <result column="s_name" property="sname"/>
+        <result column="s_password" property="spassword"/>
+        <result column="s_gender" property="sgender"/>
+        <result column="s_birthday" property="sbirthday"/>
+        <result column="s_idcard" property="sidcard"/>
+        <result column="s_faculty" property="sfaculty"/>
+        <result column="s_class" property="sclass"/>
+        <result column="s_phone" property="sphone"/>
+        <result column="s_email" property="semail"/>
+    </resultMap>
+    <resultMap id="SignSetResult" type="com.liyanwei.signinsystem.bean.SignSet">
+        <id column="id" property="id"/>
+        <result column="c_number" property="cnumber"/>
+        <result column="t_number" property="tnumber"/>
+        <result column="classtime" property="classtime"/>
+        <result column="class" property="classnumber"/>
+    </resultMap>
+    <resultMap id="SignRecordResult" type="SignRecord">
+        <id column="qd_id" property="qdid"/>
+        <result column="s_number" property="snumber"/>
+        <result column="t_number" property="tnumber"/>
+        <result column="c_number" property="cnumber"/>
+        <result column="signintime" property="signintime"/>
+        <result column="set_id" property="setId"/>
+    </resultMap>
+   <!--添加学生信息-->
+    <insert id="addStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="sid">
+        insert into students(s_number,s_name, s_password, s_gender, s_birthday, s_idcard, s_faculty, s_class, s_phone, s_email) values (#{snumber},#{sname},#{spassword},#{sgender},#{sbirthday},#{sidcard},#{sfaculty},#{sclass},#{sphone},#{semail})
+    </insert>
+    <insert id="studentSignin" parameterType="com.liyanwei.signinsystem.bean.SignRecord">
+        insert into signinrecord(s_number, t_number, c_number, signintime, set_id) values (#{snumber},#{tnumber},#{cnumber},#{signintime},#{setId})
+    </insert>
+
+    <!--查询所有学生-->
+    <select id="selectAllStudents" resultMap="StudentResult">
+        select s_id,s_number,s_name,s_password,s_gender,s_birthday,s_idcard,s_faculty,s_class,s_phone,s_email from students
+    </select>
+    <select id="selectStudentsByFaculty" parameterType="String" resultMap="StudentResult">
+        select s_id, s_number, s_name, s_password, s_gender, s_birthday, s_idcard, s_faculty, s_class, s_phone, s_email from students where s_faculty=#{sfaculty}
+    </select>
+    <select id="selectStudentsBySclass" parameterType="String" resultMap="StudentResult">
+        select s_id, s_number, s_name, s_password, s_gender, s_birthday, s_idcard, s_faculty, s_class, s_phone, s_email from students where s_class=#{sclass}
+    </select>
+    <!--通过用户名和密码查询学生-->
+    <select id="selectStudent" parameterType="String" resultMap="StudentResult">
+        select s_id,s_name,s_password,s_gender,s_birthday,s_idcard,s_faculty,s_class,s_phone,s_email from students where s_name=#{sname} and s_password=#{spassword}
+    </select>
+    <!--通过学生学号查找学生-->
+    <select id="selectStudentBySnumber" parameterType="String" resultMap="StudentResult">
+        select s_id,s_number,s_password,s_name,s_gender,s_birthday,s_idcard,s_faculty,s_class,s_phone,s_email from students where s_number = #{s_number}
+    </select>
+    <!--通过学生姓名查询学生信息-->
+    <select id="selectStudentBySname" parameterType="String" resultMap="StudentResult">
+        select s_id,s_number,s_password,s_name,s_gender,s_birthday,s_idcard,s_faculty,s_class,s_phone,s_email from students where s_name = #{sname}
+    </select>
+    <!--通过学号和密码查询学生信息-->
+    <select id="selectStuBySnoAndPass" parameterType="Student" resultMap="StudentResult">
+        select s_id, s_number,s_password, s_name, s_gender, s_birthday, s_idcard, s_faculty, s_class, s_phone, s_email from students where s_number=#{snumber} and s_password=#{spassword}
+    </select>
+    <!--通过班级信息查询签到设置信息-->
+    <select id="selectSignSetByClass" parameterType="String" resultMap="SignSetResult">
+        select id, c_number, t_number, classtime, class from setsignin where class=#{classnumber}
+    </select>
+    <!--通过setID信息查询签到设置信息-->
+    <select id="selectSignSetBySetId" parameterType="Integer" resultMap="SignSetResult">
+        select id, c_number, t_number, classtime, class from setsignin where id=#{setId}
+    </select>
+    <select id="selectSignSetByCtname" parameterType="String" resultMap="SignSetResult">
+        select id, c_number, t_number, classtime, class from setsignin where c_number=#{cnumber} and t_number=#{tnumber} and classtime=#{classtime}
+    </select>
+
+    <select id="selectSignRecordBySnum" parameterType="String" resultMap="SignRecordResult">
+        select qd_id, s_number, t_number, c_number, signintime, set_id from signinrecord where s_number=#{snumber}
+    </select>
+    <select id="selectSignRecordBySnumAndSetId" parameterType="SignRecord" resultMap="SignRecordResult">
+        select qd_id, s_number, t_number, c_number, signintime, set_id from signinrecord where s_number=#{snumber} and set_id=#{setId}
+    </select>
+    <select id="selectSignRecordBySetId" parameterType="Integer" resultMap="SignRecordResult">
+        select qd_id, s_number, t_number, c_number, signintime, set_id from signinrecord where set_id=#{setId}
+    </select>
+
+    <!--通过学生ID修改学生信息-->
+    <update id="updateStudentById" parameterType="Student">
+        update students
+        <set>
+            <if test="snumber!=null&amp;&amp;snumber!=''">s_number=#{snumber},</if>
+            <if test="sname!=null&amp;&amp;sname!=''">s_name=#{sname},</if>
+            <if test="spassword!=null&amp;&amp;spassword!=''">s_password=#{spassword},</if>
+            <if test="sgender!=null&amp;&amp;sgender!=''">s_gender=#{sgender},</if>
+            <if test="sbirthday!=null&amp;&amp;sbirthday!=''">s_birthday=#{sbirthday},</if>
+            <if test="sidcard!=null&amp;&amp;sidcard!=''">s_idcard=#{sidcard},</if>
+            <if test="sfaculty!=null&amp;&amp;sfaculty!=''">s_faculty=#{sfaculty},</if>
+            <if test="sclass!=null&amp;&amp;sclass!=''">s_class=#{sclass},</if>
+            <if test="sphone!=null&amp;&amp;sphone!=''">s_phone=#{sphone},</if>
+            <if test="semail!=null&amp;&amp;semail!=''">s_email=#{semail}</if>
+        </set>
+        where s_id=#{sid}
+    </update>
+    <!--通过学生ID删除学生信息-->
+    <delete id="deleteStudentById" parameterType="Integer">
+        delete from students where s_id=#{sid}
+    </delete>
+
+</mapper>

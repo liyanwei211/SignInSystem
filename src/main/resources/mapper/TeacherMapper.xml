@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.TeacherMapper">
+    <resultMap id="TeacherResult" type="com.liyanwei.signinsystem.bean.Teacher">
+        <id column="t_id" property="tid"/>
+        <result column="t_number" property="tnumber"/>
+        <result column="t_name" property="tname"/>
+        <result column="t_password" property="tpassword"/>
+        <result column="t_gender" property="tgender"/>
+        <result column="t_birthday" property="tbirthday"/>
+        <result column="t_idcard" property="tidcard"/>
+        <result column="t_faculty" property="tfaculty"/>
+        <result column="t_phone" property="tphone"/>
+        <result column="t_email" property="temail"/>
+    </resultMap>
+   <!-- 添加教师信息 -->
+   <insert id="addTeacher" parameterType="com.liyanwei.signinsystem.bean.Teacher">
+        insert into Teachers(t_number,t_name, t_password, t_gender, t_birthday, t_idcard, t_faculty, t_phone, t_email) values (#{tnumber},#{tname},#{tpassword},#{tgender},#{tbirthday},#{tidcard},#{tfaculty},#{tphone},#{temail})
+   </insert>
+    <!--添加签到信息-->
+    <insert id="addSignIn" parameterType="com.liyanwei.signinsystem.bean.SignSet">
+        insert into setsignin(c_number, t_number, classtime, class) values (#{cnumber},#{tnumber},#{classtime},#{classnumber})
+    </insert>
+    <!--选择所有教师-->
+    <select id="selectAllTeachers" resultMap="TeacherResult">
+        select t_id,t_number,t_password,t_name,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from Teachers
+    </select>
+    <!--通过用户名密码查询教师-->
+    <select id="selectTeacher" parameterType="String" resultMap="TeacherResult">
+        select t_id,t_number,t_name,t_password,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from Teachers where t_name=#{tname} and t_password=#{tpassword}
+    </select>
+    <!--通过用户名查询教师信息-->
+    <select id="selectTeacherByName" parameterType="String" resultMap="TeacherResult">
+        select t_id,t_number,t_name,t_password,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from teachers where t_name=#{tname}
+    </select>
+    <!--通过用户名查询教师信息-->
+    <select id="selectTeacherByTname" parameterType="String" resultMap="TeacherResult">
+        select t_id,t_number,t_name,t_password,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from teachers where t_name=#{tname}
+    </select>
+    <!--通过教师工号查询教师信息-->
+    <select id="selectTeacherByTnum" parameterType="String" resultMap="TeacherResult">
+        select t_id,t_number,t_name,t_password,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from teachers where t_number=#{tnumber}
+    </select>
+    <select id="selectTeacherByFaculty" parameterType="String" resultMap="TeacherResult">
+        select t_id,t_number,t_name,t_password,t_gender,t_birthday,t_idcard,t_faculty,t_phone,t_email from teachers where t_faculty=#{tfaculty}
+    </select>
+    <!--通过教师工号和密码查询用户-->
+    <select id="selectTeacherByNumAndPass" parameterType="String" resultMap="TeacherResult">
+        select t_id, t_number, t_name,t_password,t_gender, t_birthday, t_idcard, t_faculty, t_phone, t_email from teachers where t_number=#{tnumber} and t_password=#{tpassword}
+    </select>
+    <!--通过教师ID修改教师信息-->
+    <update id="updateTeacherById" parameterType="Teacher">
+        update teachers
+        <set>
+            <if test="tnumber!=null&amp;&amp;tnumber!=''">t_number=#{tnumber},</if>
+            <if test="tname!=null&amp;&amp;tname!=''">t_name=#{tname},</if>
+            <if test="tpassword!=null&amp;&amp;tpassword!=''">t_password=#{tpassword},</if>
+            <if test="tgender!=null&amp;&amp;tgender!=''">t_gender=#{tgender},</if>
+            <if test="tbirthday!=null&amp;&amp;tbirthday!=''">t_birthday=#{tbirthday},</if>
+            <if test="tidcard!=null&amp;&amp;tidcard!=''">t_idcard=#{tidcard},</if>
+            <if test="tfaculty!=null&amp;&amp;tfaculty!=''">t_faculty=#{tfaculty},</if>
+            <if test="tphone!=null&amp;&amp;tphone!=''">t_phone=#{tphone},</if>
+            <if test="temail!=null&amp;&amp;temail!=''">t_email=#{temail}</if>
+        </set>
+        <where>
+            t_id=#{tid}
+        </where>
+    </update>
+    <!--通过教师ID删除教师信息-->
+    <delete id="deleteTeacherById" parameterType="Integer">
+        delete from teachers where t_id=#{tid}
+    </delete>
+
+
+</mapper>

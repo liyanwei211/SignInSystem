@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>请假信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="../login.html">
+                <i class="layui-icon">&#xe68e;</i>
+                注销登录
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                课程信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="studentinfo.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                学生信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="teacher.html">
+                <i class="layui-icon">&#xe612;</i>
+                教师信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="signins.html">
+                <i class="layui-icon">&#x1005;</i>
+                查看签到
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                查看请假
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child">
+                <dd class="layui-nav-item"><a href="selectstudent.html">学生信息查询</a></dd>
+                <dd class="layui-nav-item"><a href="selectcourse.html">课程信息查询</a></dd>
+                <dd class="layui-nav-item"><a href="selectteacher.html">教师信息查询</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe61f;</i>
+                信息添加
+            </a>
+            <dl class="layui-nav-child" >
+                <dd class="layui-nav-item" ><a href="addstudent.html">添加学生信息</a></dd>
+                <dd class="layui-nav-item" ><a href="addcourse.html">添加课程信息</a></dd>
+                <dd class="layui-nav-item" ><a href="addteacher.html">添加教师信息</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="demoTable">
+            <div class="layui-btn-group demoTable">
+                <button class="layui-btn" data-type="getCheckData">删除选中行数据</button>
+                <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+                <button class="layui-btn" data-type="isAll">验证是否全选</button>
+            </div>
+        </div>
+        <table id="test" lay-filter="demo"></table>
+    </div>
+
+</div>
+
+
+<div class="fly-footer">
+
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../../res/layui/layui.js"></script>
+<script>
+
+    //表格组件
+    layui.use('table', function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        //第一个实例
+        table.render({
+            elem: '#test'
+            ,id:'test'
+            ,url: '/SelectAllStudentQJ' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {type:'checkbox', fixed: 'left', align: "center",}
+                ,{field: 'qjid', title: 'ID', sort: true,width: 80, fixed: 'left', align: "center"}
+                ,{field: 'snumber', title: '学号', align: 'center' }
+                ,{field: 'sname', title: '用户名',align: 'center'}
+                ,{field: 'sclass', title: '所在班级',align: 'center'}
+                ,{field: 'qjtime', title: '请假时间',align: 'center'}
+                ,{field: 'qjreason', title: '请假理由',align: 'center'}
+                ,{field: 'qjstatus', title: '状态',align: 'center'}
+                ,{fixed: 'right',align:'center', toolbar: '#barDemo',width:100}
+            ]]
+            ,response: {
+                statusCode:200//重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            }
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'detail') {
+                layer.msg('课程ID：' + data.cid +'<br>'+
+                    '课程号：' + data.cnumber +'<br>'+
+                    '课程名称：' + data.cname +'<br>'+
+                    '课时：' + data.ctime
+                );
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                    var url = "/deleteStudentQJById/"+data.qjid;
+                    $.get(url,{"qjid":data.qjid},function () {
+                        alert("删除成功");
+                    });
+                });
+            } else if (obj.event === 'edit') {
+
+            }
+        });
+        var $ = layui.$, active = {
+            getCheckData: function () { //获取选中数据
+                var checkStatus = table.checkStatus('test')
+                    , data = checkStatus.data;
+
+                var qjid = [];
+                for (var i = 0; i < data.length ; i++) {
+                    qjid.push(data[i].qjid);
+                }
+                console.log(qjid);
+                $.ajax({
+                   url: '/deleteStudentQJsById'
+                   ,method: 'get'
+                   ,data: {
+                       "qjid": JSON.stringify(qjid)
+                    }
+                    ,success:function (data) {
+                       alert(data.msg);
+                        table.reload('test', {
+                            url: '/SelectAllStudentQJ'
+                            ,page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                            , where: {
+                            }
+                        });
+                    }
+                });
+                table.reload('test', {
+                    url: SelectAllStudentQJ
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                    }
+                });
+
+            }
+            , getCheckLength: function () { //获取选中数目
+                var checkStatus = table.checkStatus('test')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () { //验证是否全选
+                var checkStatus = table.checkStatus('test');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../../res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

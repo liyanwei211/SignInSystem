@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.CourseVideoMapper">
+    <resultMap id="CourseVideoResult" type="CourseVideo">
+        <id column="v_id" property="vid" />
+        <result column="c_number" property="cnumber"/>
+        <result column="t_number" property="tnumber"/>
+        <result column="coursetime" property="coursetime"/>
+        <result column="v_video" property="vvideo"/>
+    </resultMap>
+   <!--添加课程视频信息-->
+   <insert id="addCourseVideo" parameterType="CourseVideo">
+       insert into coursevideo(c_number, t_number, coursetime, v_video) values (#{cnumber},#{tnumber},#{coursetime},#{vvideo})
+   </insert>
+    <!--通过课程号查询课程视频-->
+    <select id="selectVideoByCnum" parameterType="String" resultMap="CourseVideoResult">
+        select v_id, c_number, t_number, coursetime, v_video from coursevideo where c_number=#{cnumber}
+    </select>
+    <!--通过教师工号查询课程视频-->
+    <select id="selectVideoByTnum" parameterType="String" resultMap="CourseVideoResult">
+        select v_id, c_number, t_number, coursetime, v_video from coursevideo where t_number=#{tnumber}
+    </select>
+    <!--查询所有课程视频信息-->
+    <select id="selectAllCourseVideo" resultMap="CourseVideoResult">
+        select v_id, c_number, t_number, coursetime, v_video from coursevideo
+    </select>
+    <!--通过课程视频ID删除课程视频-->
+    <delete id="deleteVideoById" parameterType="Integer">
+        delete from coursevideo where v_id=#{vid}
+    </delete>
+
+
+</mapper>

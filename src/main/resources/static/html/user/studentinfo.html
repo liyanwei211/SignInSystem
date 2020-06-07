@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>个人信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <ul class="layui-nav fly-nav layui-hide-xs">
+
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item layui-this">
+            <a href="studentinfo.html">
+                <i class="layui-icon">&#xe68e;</i>
+                个人信息
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="index.html">
+                <i class="layui-icon">&#xe705;</i>
+                我的选课
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="course.html">
+                <i class="layui-icon">&#xe6ed;</i>
+                课程视频
+            </a>
+        </li>
+        <li class="layui-nav-item ">
+            <a href="setinfo.html">
+                <i class="layui-icon">&#xe612;</i>
+                修改信息
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="signin.html">
+                <i class="layui-icon">&#x1005;</i>
+                我的签到
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="qingjia.html">
+                <i class="layui-icon">&#xe611;</i>
+                我的请假
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a>
+                <i class="layui-icon">&#xe615;</i>
+                信息查询
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="selectsignin.html">签到查询</a></dd>
+                <dd><a href="selectqingjia.html">请假查询</a></dd>
+            </dl>
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <ul class="layui-tab-title" id="LAY_mine">
+                <li class="layui-this" lay-id="info">我的资料</li>
+            </ul>
+            <div class="layui-tab-content" style="padding: 20px 0;">
+                <div class="layui-form layui-form-pane layui-tab-item layui-show">
+                    <form method="post" id="form1" lay-filter="form1" action="/UpdateStudentById">
+                        <div class="layui-form-item">
+                            <label for="L_email" class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="L_email" name="email"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="L_username" class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline" id="div2">
+                                <input type="text" id="L_username" name="username"
+                                       disabled autocomplete="" value="" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <input type="text" id="sex" name="sex"
+                                           disabled autocomplete="off" value="" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">生日</label>
+                            <div class="layui-input-inline">
+                                <input type="text" disabled class="layui-input" name="birthday" id="birthday">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">身份证号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="idcard" name="idcard" lay-verify="idcard"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属学院</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="faculty" name="faculty"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所在班级</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="class" name="class"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">学号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="number" name="number"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="phone" name="phone"
+                                       disabled autocomplete="off" value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <button type="button" id="exit" class="layui-btn">注销登录</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+<div class="fly-footer">
+
+</div>
+
+<script src="../../res/layui/layui.js"></script>
+<script>
+    layui.use(['layer','form'],function(){
+        var layer = layui.layer,
+            $=layui.jquery,
+            form = layui.form;//必须先声明
+        $.get("/StudentInfo",{},function(res){
+            var data = res.data;
+            console.log(data);
+            for (var i = 0; i < data.length ; i++) {
+                var student = data[i];
+                $("#L_email").val(student.semail)
+                $("#L_username").val(student.sname)
+                $("#sex").val(student.sgender)
+                $("#birthday").val(student.sbirthday)
+                $("#idcard").val(student.sidcard)
+                $("#faculty").val(student.sfaculty)
+                $("#class").val(student.sclass)
+                $("#number").val(student.snumber)
+                $("#phone").val(student.sphone)
+
+
+            }
+
+        })
+    });
+
+    layui.use('jquery',function () {
+        var $ = layui.jquery;
+        $("#exit").click(function () {
+            $.get("/UserExit",{},function (data) {
+                window.location.href="../login.html";
+            })
+        })
+    })
+    //日期组件
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#birthday' //指定元素
+        });
+    });
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../../res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: true
+        , base: '../../res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+</body>
+</html>

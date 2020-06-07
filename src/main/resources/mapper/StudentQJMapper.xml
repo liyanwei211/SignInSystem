@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.StudentQJMapper">
+   <resultMap id="StudentQJResult" type="StudentQJ">
+       <id column="qj_id" property="qjid"/>
+       <result column="s_number" property="snumber"/>
+       <result column="s_name" property="sname"/>
+       <result column="s_class" property="sclass"/>
+       <result column="qj_time" property="qjtime"/>
+       <result column="qj_reason" property="qjreason"/>
+       <result column="qj_status" property="qjstatus"/>
+   </resultMap>
+    <!--添加请假信息-->
+    <insert id="addStudentQj" parameterType="StudentQJ">
+        insert into studentqj(s_number, s_name, s_class, qj_time, qj_reason, qj_status) values(#{snumber},#{sname},#{sclass},#{qjtime},#{qjreason},#{qjstatus})
+    </insert>
+    <!--通过学生学号查询请假信息-->
+    <select id="selectStudentQjBySnum" parameterType="String" resultMap="StudentQJResult">
+        select qj_id, s_number, s_name, s_class, qj_time, qj_reason, qj_status from studentqj where s_number=#{snumber}
+    </select>
+    <!--通过学生姓名查询请假信息-->
+    <select id="selectStudentQjBySname" parameterType="String" resultMap="StudentQJResult">
+        select qj_id, s_number, s_name, s_class, qj_time, qj_reason, qj_status from studentqj where s_name=#{sname}
+    </select>
+    <!--根据学生班级查询请假信息-->
+    <select id="selectStudentQjBySclass" parameterType="String" resultMap="StudentQJResult">
+        select qj_id, s_number, s_name, s_class, qj_time, qj_reason, qj_status from studentqj where s_class=#{sclass}
+    </select>
+    <!--查询所有请假信息-->
+    <select id="selectAllStudentQjs" resultMap="StudentQJResult">
+        select qj_id, s_number, s_name, s_class, qj_time, qj_reason, qj_status from studentqj
+    </select>
+    <!--根据请假信息ID修改请假信息状态-->
+    <update id="updateStudentQjById" parameterType="StudentQJ">
+        update studentqj
+        <set>
+            <if test="qjstatus!=null">qj_status=#{qjstatus}</if>
+        </set>
+        where qj_id=#{qjid}
+    </update>
+    <!--根据ID删除请假信息-->
+    <delete id="deleteStudentQjById" parameterType="Integer">
+        delete from studentqj where qj_id=#{qjid}
+    </delete>
+
+</mapper>

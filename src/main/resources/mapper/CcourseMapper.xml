@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liyanwei.signinsystem.mapper.CcourseMapper">
+    <resultMap id="CcourseResult" type="com.liyanwei.signinsystem.bean.Ccourse">
+        <id column="cc_id" property="ccid" />
+        <result column="number" property="number"/>
+        <result column="c_number" property="cnumber"/>
+        <result column="charactor" property="charactor"/>
+    </resultMap>
+    <!--添加选课信息-->
+    <insert id="addCcourse" parameterType="Ccourse">
+        insert into ccourses(number, c_number, charactor) values(#{number},#{cnumber},#{charactor})
+    </insert>
+    <!--根据学号或工号查询选课信息-->
+    <select id="selectCcByNum" parameterType="String" resultMap="CcourseResult">
+        select cc_id, number, c_number, charactor from ccourses where number=#{number}
+    </select>
+
+    <select id="selectCcByNumAndCnum" parameterType="String" resultMap="CcourseResult">
+        select cc_id, number, c_number, charactor from ccourses where number=#{number} and c_number=#{cnumber}
+    </select>
+    <!--根据ID删除选课信息-->
+    <delete id="deleteCcById" parameterType="Integer">
+        delete from ccourses where cc_id=#{ccid}
+    </delete>
+
+</mapper>
